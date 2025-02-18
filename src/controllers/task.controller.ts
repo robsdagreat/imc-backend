@@ -6,7 +6,7 @@ import Task, { ITask } from "../models/task.model";
 export const getTasks = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const userId = req.user?.id; // Extract user ID from the request object
-    const tasks: ITask[] = await Task.find({ user: userId }).sort({ createdAt: -1 });
+    const tasks: ITask[] = await Task.find().sort({ createdAt: -1 });
     res.json(tasks);
   } catch (error) {
     res.status(500).json({ message: (error as Error).message });
@@ -18,7 +18,7 @@ export const getTaskById = async (req: AuthRequest, res: Response): Promise<void
   try {
     const { id } = req.params;
     const userId = req.user?.id; // Extract user ID from the request object
-    const task: ITask | null = await Task.findOne({ _id: id, user: userId });
+    const task: ITask | null = await Task.findOne({ _id: id});
 
     if (!task) {
       res.status(404).json({
@@ -42,10 +42,10 @@ export const getTaskById = async (req: AuthRequest, res: Response): Promise<void
 // Create a task (associate it with the logged-in user)
 export const createTask = async (req: AuthRequest, res: Response): Promise<void> => {
   const { title, description, priority, status } = req.body;
-  const userId = req.user?.id; // Extract user ID from the request object
+  // const userId = req.user?.id; // Extract user ID from the request object
 
   try {
-    const newTask: ITask = new Task({ title, description, priority, status, user: userId });
+    const newTask: ITask = new Task({ title, description, priority, status });
     await newTask.save();
     res.status(201).json({
       message: "Task added successfully",
@@ -63,7 +63,7 @@ export const updateTask = async (req: AuthRequest, res: Response): Promise<void>
 
   try {
     const updatedTask: ITask | null = await Task.findOneAndUpdate(
-      { _id: id, user: userId }, // Ensure the task belongs to the user
+      { _id: id}, // Ensure the task belongs to the user
       req.body,
       { new: true }
     );
@@ -88,7 +88,7 @@ export const deleteTask = async (req: AuthRequest, res: Response): Promise<void>
   const userId = req.user?.id; // Extract user ID from the request object
 
   try {
-    const deletedTask: ITask | null = await Task.findOneAndDelete({ _id: id, user: userId });
+    const deletedTask: ITask | null = await Task.findOneAndDelete({ _id: id });
 
     if (!deletedTask) {
       res.status(404).json({ message: "Task not found" });

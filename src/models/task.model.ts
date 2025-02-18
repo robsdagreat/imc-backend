@@ -5,7 +5,7 @@ export interface ITask extends Document {
   description?: string;
   priority: "High" | "Medium" | "Low";
   status: "Pending" | "Completed";
-  user: mongoose.Schema.Types.ObjectId;
+  // user: mongoose.Schema.Types.ObjectId;
 }
 
 const TaskSchema: Schema = new Schema(
@@ -14,7 +14,7 @@ const TaskSchema: Schema = new Schema(
     description: { type: String },
     priority: { type: String, enum: ["High", "Medium", "Low"], default: "Medium" },
     status: { type: String, enum: ["Pending", "Completed"], default: "Pending" },
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, 
+    // user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, 
   },
   { timestamps: true }
 );
